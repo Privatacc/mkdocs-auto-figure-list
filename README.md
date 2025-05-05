@@ -1,4 +1,4 @@
-MkDocs Auto figure list
+# MkDocs Auto figure list
 
 **Note: This plugin is still in an early development phase and may contain some bugs. You are welcome to contribute to its further development.**
 
