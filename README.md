@@ -1,4 +1,4 @@
-# MkDocs Auto figure list
+# MkDocs auto figure list
 
 **Note: This plugin is still in an early development phase and may contain some bugs. You are welcome to contribute to its further development.**
 
@@ -14,9 +14,9 @@ Example of a `<figure>` tag:
 
 Installation:
 You can install this package with pip:
-
+```
 pip install mkdocs-auto-figure-list
-
+```
 
 Use:
 The plugin must be added to the `mkdocs.yml` file as follows:
