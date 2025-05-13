@@ -4,6 +4,8 @@
 
 This plugin searches through all markdown files for the HTML tags `<figure>` and `<figcaption>`. These are then collected in ascending order, and a new markdown file named `figure-list.md` is created. This file lists all the figures and adds a link to the corresponding image.
 
+This plugin works with the PDF-Exporter Plugin: https://github.com/domWalters/mkdocs-to-pdf
+
 Example of a `<figure>` tag:
 ```
 <figure>
