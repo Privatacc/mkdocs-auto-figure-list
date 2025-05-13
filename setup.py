@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mkdocs-auto-figure-list",
-    version="0.1",
+    version="0.1.1",
     description="auto creation for figures",
     author = "privatacc",
     packages=find_packages(),

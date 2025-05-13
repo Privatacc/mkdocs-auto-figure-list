@@ -29,15 +29,25 @@ class FigureListCreation(BasePlugin):
         )
 
         list_items = []
+
         for full_html, caption in figures:
             # generates id for every figure img
             fig_id = f"fig-{self.figure_counter}"
             
+            # add new caption label 
+            labeled_caption = f"{self.figure_label} {self.figure_counter}: {caption}"
+
+            # replace caption 
+            new_html = re.sub(
+                r'(<figcaption>)(.*?)(</figcaption>)',
+                rf'\1{labeled_caption}\3',
+                full_html,
+                flags=re.DOTALL
+            )
+
             # add the id tag to the figures
             if "id" not in full_html:
-                new_html = re.sub(r'<figure', f'<figure id="{fig_id}"', full_html)
-            else:
-                new_html = full_html 
+                new_html = re.sub(r'<figure', f'<figure id="{fig_id}"', new_html)
             
             markdown = markdown.replace(full_html, new_html)
 
@@ -58,7 +68,7 @@ class FigureListCreation(BasePlugin):
                 figure_link = f"{path}{fig_id}"
 
             list_items.append(
-            f'<li><a href="{figure_link}">{self.figure_label} {self.figure_counter}: {caption}</a></li>'
+            f'<li><a href="{figure_link}">{labeled_caption}</a></li>'
             )
 
             self.figure_counter += 1
@@ -67,17 +77,8 @@ class FigureListCreation(BasePlugin):
             figure_list_html = '<ul class="list-of-figures">\n' + '\n'.join(list_items) + '\n</ul>'
 
             self.figures.append(figure_list_html)
-
-
-
-        # changes the headline
-        if self.heading:
-            heading_line = f"# {self.heading}"
-        if heading_line not in markdown:
-            markdown = heading_line + "\n\n" + markdown
         
         return markdown
-
 
 
     def on_post_build(self, config):
