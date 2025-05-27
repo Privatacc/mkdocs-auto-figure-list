@@ -13,5 +13,10 @@ setup(
         'mkdocs.plugins': [
             'auto-figure-list = plugin.plugin:FigureListCreation'
         ]
-    }
+    },
+    url="https://github.com/Privatacc/mkdocs-auto-figure-list",
+    project_urls={
+        "Source": "https://github.com/Privatacc/mkdocs-auto-figure-list",
+        "Tracker": "https://github.com/Privatacc/mkdocs-auto-figure-list/issues",
+    },
 )
