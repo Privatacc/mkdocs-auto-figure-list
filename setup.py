@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="mkdocs-auto-figure-list",
-    version="0.1.4",
+    version="0.2.0",
     description="Auto creation for figures in MkDocs.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -14,7 +14,7 @@ setup(
     install_requires=["mkdocs"],
     entry_points={
         'mkdocs.plugins': [
-            'auto-figure-list = plugin.plugin:FigureListCreation'
+            'auto-figure-list = mkdocs_auto_figure_list.plugin:FigureListCreation'
         ]
     },
     url="https://github.com/Privatacc/mkdocs-auto-figure-list",
