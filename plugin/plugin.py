@@ -124,8 +124,20 @@ class FigureListCreation(BasePlugin):
             else:
                 # add new block
                 new_file_content = existing.strip() + "\n\n" + auto_block
+        else:
+            new_file_content = f"{heading_line}\n\n{auto_block}"
 
-        with open(figure_file_path, 'w', encoding='utf-8') as f:
-            f.write(new_file_content)
+        # Write only, when something changed
+        if os.path.exists(figure_file_path):
+            with open(figure_file_path, 'r', encoding='utf-8') as f:
+                current_content = f.read()
+        else:
+            current_content = ""
 
-        print(f"Figure list updated: {figure_file_path}")
+        if current_content.strip() != new_file_content.strip():
+            with open(figure_file_path, 'w', encoding='utf-8') as f:
+                f.write(new_file_content)
+            print(f"Figure list updated: {figure_file_path}")
+        else:
+            print("Figure list has no changes (content identical).")
+
