@@ -21,23 +21,14 @@ class FigureListCreation(BasePlugin):
         return config
     
     def on_page_markdown(self, markdown, page, config, files):
-        
-        # find all <figure> with figcaption
-        figures = re.findall(
-            r'(<figure.*?>.*?<figcaption>(.*?)</figcaption>.*?</figure>)',
-            markdown, re.DOTALL
-        )
-
         list_items = []
 
-        for full_html, caption in figures:
-            # generates id for every figure img
+        def figure_replacer(match):
+            full_html = match.group(0)
+            caption = match.group(2)
             fig_id = f"fig-{self.figure_counter}"
-            
-            # add new caption label 
             labeled_caption = f"{self.figure_label} {self.figure_counter}: {caption}"
 
-            # replace caption 
             new_html = re.sub(
                 r'(<figcaption>)(.*?)(</figcaption>)',
                 rf'\1{labeled_caption}\3',
@@ -45,39 +36,35 @@ class FigureListCreation(BasePlugin):
                 flags=re.DOTALL
             )
 
-            # add the id tag to the figures
-            if "id" not in full_html:
+            if 'id="' not in full_html:
                 new_html = re.sub(r'<figure', f'<figure id="{fig_id}"', new_html)
-            
-            markdown = markdown.replace(full_html, new_html)
 
-            # generates the relative path
-            dir = os.path.splitext(page.file.src_path)[0]
-
-            path = ""
+            dir = os.path.splitext(page.file.src_path)[0].replace("\\", "/")
             if dir != "index":
-                path +=  '../' + dir + "/"
-            else:
-                path = '../#' 
-
-            
-            # generates the link to the images with the ids
-            if dir != "index":
+                path = '../' + dir + "/"
                 figure_link = f"{path}#{fig_id}"
             else:
-                figure_link = f"{path}{fig_id}"
+                figure_link = f"../#{fig_id}"
 
             list_items.append(
-            f'<li><a href="{figure_link}">{labeled_caption}</a></li>'
+                f'<li><a href="{figure_link}">{labeled_caption}</a></li>'
             )
 
             self.figure_counter += 1
+            return new_html
+
+        # replace all figure tags
+        markdown = re.sub(
+            r'(<figure.*?>.*?<figcaption>(.*?)</figcaption>.*?</figure>)',
+            figure_replacer,
+            markdown,
+            flags=re.DOTALL
+        )
 
         if list_items:
             figure_list_html = '<ul class="list-of-figures">\n' + '\n'.join(list_items) + '\n</ul>'
-
             self.figures.append(figure_list_html)
-        
+
         return markdown
 
 
