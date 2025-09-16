@@ -14,10 +14,12 @@ class FigureListCreation(BasePlugin):
         self.figure_counter = 1
         self.heading = "List of Figure"
         self.figure_label = "figure"
-    
+        self.use_dir_urls = True
+
     def on_config(self, config):
         self.heading = self.config.get('heading', self.heading)
         self.figure_label = self.config.get('figure_label', self.figure_label)
+        self.use_dir_urls = config["use_directory_urls"]
         return config
     
     def on_page_markdown(self, markdown, page, config, files):
@@ -41,7 +43,10 @@ class FigureListCreation(BasePlugin):
 
             dir = os.path.splitext(page.file.src_path)[0].replace("\\", "/")
             if dir != "index":
+                dir = dir.rsplit("/", 1)[0]
                 path = '../' + dir + "/"
+                if not self.use_dir_urls:
+                    path =  path + 'index.html'
                 figure_link = f"{path}#{fig_id}"
             else:
                 figure_link = f"../#{fig_id}"
